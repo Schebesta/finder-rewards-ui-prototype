@@ -15,10 +15,11 @@
                     colors: {
                         finder: {
                             blue: '#0052FF',
-                            lightblue: '#E5EDFF',
+                            lightblue: '#E0F2FE',
+                            blueborder: '#BAE6FD',
                             dark: '#1A202C',
                             gray: '#718096',
-                            lightgray: '#F7FAFC',
+                            lightgray: '#F6F5F2',
                             green: '#00B268',
                             lightgreen: '#E6F7F0',
                             red: '#E53E3E',
@@ -31,7 +32,7 @@
         }
     </script>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; }
         .timeline-line {
             position: absolute;
             left: 11px;
@@ -53,89 +54,169 @@
         }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="text-gray-900">
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState } = React;
 
         const dealsData = [
-            { id: 1, store: 'Agoda', amount: '$27.82', status: 'Tracked', date: '90 days after trip', icon: '🏨', purchaseDate: '10 Jan 2026 2:15pm' },
-            { id: 2, store: 'Booking.com', amount: '$42.63', status: 'Tracked', date: '70 days after trip', icon: '🏨', purchaseDate: '15 Jan 2026 9:30am' },
-            { id: 3, store: 'Booking.com', amount: '$3.08', status: 'Tracked', date: '22 Jan 2026', icon: '🏨', purchaseDate: '20 Nov 2025 4:45pm' },
-            { id: 4, store: 'Booking.com', amount: '$5.95', status: 'Rejected', date: '26 Dec 2025', icon: '🏨', purchaseDate: '26 Nov 2025 8:19pm' },
-            { id: 5, store: 'Strand', amount: '$3.50', status: 'Confirmed', date: '12 Mar 2025', icon: '👜', tag: 'Confirmed 12 days early ⚡', purchaseDate: '12 Feb 2025 11:11pm' },
-            { id: 6, store: 'Yasaka Ramen', amount: '$4.45', status: 'Rejected', date: '30 Dec 2024', icon: '🍜', purchaseDate: '15 Dec 2024 1:20pm' },
+            { 
+                id: 1, 
+                store: 'HBF Health Limited', 
+                rewardName: 'HBF Health Limited reward',
+                amount: '$250', 
+                status: 'TRACKED VISIT', 
+                internalStatus: 'Tracked',
+                date: '14 Aug 2026', 
+                update: 'We tracked your visit to HBF Health Limited.',
+                logo: <div class="text-blue-900 font-bold italic text-3xl tracking-tighter">hbf</div>,
+                purchaseDate: '14 May 2026 2:15pm'
+            },
+            { 
+                id: 2, 
+                store: 'Latitude Financial Services', 
+                rewardName: 'Latitude Financial Services reward',
+                amount: '$100', 
+                status: 'TRACKED VISIT', 
+                internalStatus: 'Tracked',
+                date: '30 Jun 2026', 
+                update: 'We tracked your visit to Latitude Financial Services.',
+                logo: <div class="text-blue-800 font-bold text-xl flex items-center gap-1"><span class="text-2xl">L:</span> LATITUDE</div>,
+                purchaseDate: '30 Mar 2026 9:30am'
+            },
+            { 
+                id: 3, 
+                store: 'Optus', 
+                rewardName: 'Optus reward',
+                preTitle: 'OFFER FINISHED',
+                amount: '$100', 
+                status: 'TRACKED VISIT', 
+                internalStatus: 'Tracked',
+                date: '30 Jul 2026', 
+                update: 'We tracked your visit to Optus.',
+                logo: <div class="text-teal-500 font-black text-2xl tracking-wider">OPTUS</div>,
+                purchaseDate: '30 Apr 2026 4:45pm'
+            },
+            { 
+                id: 4, 
+                store: 'Booking.com', 
+                rewardName: 'Booking.com reward',
+                amount: '$5.95', 
+                status: 'NOT ELIGIBLE', 
+                internalStatus: 'Rejected',
+                date: '26 Dec 2025', 
+                update: 'We couldn\'t confirm your reward.',
+                logo: <div class="text-blue-900 font-bold text-xl">Booking.com</div>,
+                purchaseDate: '26 Nov 2025 8:19pm'
+            },
+            { 
+                id: 5, 
+                store: 'Strand', 
+                rewardName: 'Strand reward',
+                amount: '$3.50', 
+                status: 'CLAIMED', 
+                internalStatus: 'Confirmed',
+                date: '12 Mar 2025', 
+                update: 'Your reward has been claimed successfully.',
+                tag: 'Confirmed 12 days early ⚡',
+                logo: <div class="text-black font-serif text-2xl">STRAND</div>,
+                purchaseDate: '12 Feb 2025 11:11pm'
+            }
         ];
 
         const ListView = ({ onSelectDeal }) => {
-            const getStatusColor = (status) => {
-                switch(status) {
-                    case 'Confirmed': return 'text-finder-green font-medium';
-                    case 'Rejected': return 'text-finder-red font-medium';
-                    default: return 'text-finder-blue font-medium';
+            const getStatusBadge = (status) => {
+                if (status === 'TRACKED VISIT') {
+                    return <span class="px-3 py-1 rounded-full border border-finder-blueborder bg-finder-lightblue text-xs font-bold text-gray-900 tracking-wide">{status}</span>;
+                } else if (status === 'CLAIMED') {
+                    return <span class="px-3 py-1 rounded-full border border-green-200 bg-green-50 text-xs font-bold text-green-800 tracking-wide">{status}</span>;
+                } else if (status === 'NOT ELIGIBLE') {
+                    return <span class="px-3 py-1 rounded-full border border-red-200 bg-red-50 text-xs font-bold text-red-800 tracking-wide">{status}</span>;
                 }
+                return <span class="px-3 py-1 rounded-full border border-gray-200 bg-gray-50 text-xs font-bold text-gray-700">{status}</span>;
             };
 
             return (
-                <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg">
-                    <div class="px-4 py-4 border-b flex items-center justify-between sticky top-0 bg-white z-10">
-                        <button class="text-xl">&lt;</button>
-                        <h1 class="text-lg font-bold">My Cashback</h1>
-                        <button class="text-xl">🎧</button>
-                    </div>
+                <div class="max-w-6xl mx-auto p-8">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-6">Active rewards</h1>
                     
-                    <div class="flex border-b">
-                        <button class="flex-1 py-3 border-b-2 border-finder-blue font-semibold text-finder-blue">Cashback in</button>
-                        <button class="flex-1 py-3 text-finder-gray">Cashback out</button>
+                    <div class="flex gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
+                        <button class="px-5 py-2 bg-gray-900 text-white rounded-full text-sm font-medium whitespace-nowrap">Show all (3)</button>
+                        <button class="px-5 py-2 border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 rounded-full text-sm whitespace-nowrap transition-colors">Tracked visit</button>
+                        <button class="px-5 py-2 border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 rounded-full text-sm whitespace-nowrap transition-colors">Processing</button>
+                        <button class="px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-sm whitespace-nowrap cursor-not-allowed">Ready to claim</button>
+                        <button class="px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-sm whitespace-nowrap cursor-not-allowed">Claimed</button>
+                        <button class="px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-sm whitespace-nowrap cursor-not-allowed">Not eligible</button>
                     </div>
 
-                    <div class="flex gap-2 px-4 py-3 overflow-x-auto text-sm border-b no-scrollbar">
-                        <button class="px-3 py-1 rounded-full border bg-gray-50 flex items-center gap-1 whitespace-nowrap">Store <span>v</span></button>
-                        <button class="px-3 py-1 rounded-full border bg-gray-50 flex items-center gap-1 whitespace-nowrap">Date <span>v</span></button>
-                        <button class="px-3 py-1 rounded-full border bg-gray-50 whitespace-nowrap">Confirmed</button>
-                        <button class="px-3 py-1 rounded-full border bg-gray-50 whitespace-nowrap">Tracked</button>
-                    </div>
-
-                    <div class="divide-y pb-20">
-                        {dealsData.map((deal, idx) => (
-                            <div key={deal.id} class="p-4 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => onSelectDeal(deal)}>
-                                {idx === 2 && <div class="text-sm font-medium text-finder-gray mb-2">22 Jan 2026</div>}
-                                {idx === 3 && <div class="text-sm font-medium text-finder-gray mb-2">26 Dec 2025</div>}
-                                {idx === 4 && <div class="text-sm font-medium text-finder-gray mb-2">12 Mar 2025</div>}
-                                {idx === 5 && <div class="text-sm font-medium text-finder-gray mb-2">30 Dec 2024</div>}
-                                
-                                <div class="flex justify-between items-start">
-                                    <div class="flex gap-3 items-start">
-                                        <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl">
-                                            {deal.icon}
-                                        </div>
-                                        <div>
-                                            <div class="font-bold text-base">{deal.store}</div>
-                                            <div class="text-sm text-finder-gray mt-1">
-                                                {deal.status === 'Tracked' ? `Store should confirm ${deal.date}` : (deal.tag ? <span class="text-finder-green">{deal.tag}</span> : deal.date)}
+                    <div class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-finder-lightgray border-b border-gray-200">
+                                    <th class="py-4 px-6 font-medium text-gray-600 w-1/3">Reward product</th>
+                                    <th class="py-4 px-6 font-medium text-gray-600">Reward</th>
+                                    <th class="py-4 px-6 font-medium text-gray-600">Payment date</th>
+                                    <th class="py-4 px-6 font-medium text-gray-600">Status</th>
+                                    <th class="py-4 px-6 font-medium text-gray-600">Update</th>
+                                    <th class="py-4 px-6"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                {dealsData.map((deal) => (
+                                    <tr 
+                                        key={deal.id} 
+                                        class="hover:bg-gray-50 cursor-pointer transition-colors group"
+                                        onClick={() => onSelectDeal(deal)}
+                                    >
+                                        <td class="py-6 px-6">
+                                            <div class="flex items-center gap-6">
+                                                <div class="w-24 flex justify-center items-center">
+                                                    {deal.logo}
+                                                </div>
+                                                <div>
+                                                    {deal.preTitle && <div class="text-xs text-gray-500 font-medium tracking-wide mb-1">{deal.preTitle}</div>}
+                                                    <div class="text-gray-900 font-medium">{deal.rewardName}</div>
+                                                    <a href="#" class="text-sm text-gray-500 underline mt-1 inline-block hover:text-gray-800" onClick={(e) => e.stopPropagation()}>Terms & conditions</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="text-right">
-                                        <div class="font-bold text-base">{deal.amount}</div>
-                                        <div class={`text-sm mt-1 ${getStatusColor(deal.status)}`}>{deal.status}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
+                                        </td>
+                                        <td class="py-6 px-6">
+                                            <div class="text-xl font-bold text-gray-900">{deal.amount}</div>
+                                        </td>
+                                        <td class="py-6 px-6 text-gray-700">
+                                            {deal.date}
+                                        </td>
+                                        <td class="py-6 px-6">
+                                            {getStatusBadge(deal.status)}
+                                        </td>
+                                        <td class="py-6 px-6 text-gray-700">
+                                            {deal.update}
+                                        </td>
+                                        <td class="py-6 px-6 text-right">
+                                            <button 
+                                                class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-gray-200 transition-colors opacity-0 group-hover:opacity-100"
+                                                onClick={(e) => { e.stopPropagation(); alert('Share action'); }}
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             );
         };
 
         const DetailView = ({ deal, onBack }) => {
-            const isConfirmed = deal.status === 'Confirmed';
-            const isRejected = deal.status === 'Rejected';
-            const isTracked = deal.status === 'Tracked';
+            const isConfirmed = deal.internalStatus === 'Confirmed';
+            const isRejected = deal.internalStatus === 'Rejected';
+            const isTracked = deal.internalStatus === 'Tracked';
 
             return (
-                <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-10">
+                <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-10 mt-8 border rounded-xl overflow-hidden">
                     <div class="px-4 py-4 flex items-center sticky top-0 bg-white z-10 border-b">
                         <button class="text-xl w-8 hover:bg-gray-100 rounded-full h-8 flex items-center justify-center" onClick={onBack}>&lt;</button>
                         <h1 class="flex-1 text-center text-lg font-bold mr-8">Activity details</h1>
@@ -149,7 +230,7 @@
                             </div>
                         )}
                         {!isConfirmed && (
-                            <div class="text-4xl mb-3">{deal.icon}</div>
+                            <div class="mb-4 h-12 flex items-center justify-center scale-150">{deal.logo}</div>
                         )}
                         
                         <h2 class="text-lg font-bold text-finder-dark">{deal.store}</h2>
@@ -157,7 +238,7 @@
                         
                         {isConfirmed && <div class="text-finder-green font-medium text-sm mt-2">Confirmed</div>}
                         {isRejected && <div class="text-finder-red font-medium text-sm mt-2 bg-finder-lightred px-2 py-1 rounded">Rejected</div>}
-                        {isTracked && <div class="text-finder-blue font-medium text-sm mt-2 bg-finder-lightblue px-2 py-1 rounded">Tracked</div>}
+                        {isTracked && <div class="text-finder-blue font-medium text-sm mt-2 bg-finder-lightblue px-2 py-1 rounded border border-finder-blueborder">Tracked</div>}
                         
                         <div class="text-finder-gray text-sm mt-2">{deal.purchaseDate}</div>
                     </div>
@@ -165,7 +246,7 @@
                     {deal.tag && (
                         <div class="p-4 bg-orange-50 border-b flex gap-3 items-start">
                             <span class="text-orange-500 mt-1">⚡</span>
-                            <p class="text-sm text-finder-dark">Your Cashback arrived earlier than expected. Talk about lightning-fast!</p>
+                            <p class="text-sm text-finder-dark">Your Reward arrived earlier than expected. Talk about lightning-fast!</p>
                         </div>
                     )}
 
@@ -174,72 +255,50 @@
                         <div class="relative pl-8 pb-6 timeline-item">
                             <div class="timeline-line"></div>
                             <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-white text-xs z-10">✓</div>
-                            <h3 class="font-bold text-finder-gray">Purchase completed</h3>
-                            <p class="text-sm text-finder-gray mt-1">You've made a successful purchase with {deal.store}.</p>
+                            <h3 class="font-bold text-finder-gray">Action completed</h3>
+                            <p class="text-sm text-finder-gray mt-1">You've successfully completed the required action with {deal.store}.</p>
                         </div>
 
-                        {/* Step 2: Cashback Tracked */}
+                        {/* Step 2: Tracked */}
                         <div class="relative pl-8 pb-6 timeline-item">
                             <div class="timeline-line"></div>
                             <div class={`absolute left-0 top-1 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs z-10 shadow-sm ${isTracked ? 'bg-finder-blue' : 'bg-gray-200'}`}>
                                 {isTracked ? '⏱' : '✓'}
                             </div>
-                            <h3 class={`font-bold ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>Cashback tracked</h3>
+                            <h3 class={`font-bold ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>Reward tracked</h3>
                             <p class={`text-sm mt-1 ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>
-                                Your order is currently under review by the store. We'll confirm your Cashback once the order is validated.
+                                {deal.update} We'll confirm your Reward once it is fully validated by the provider.
                             </p>
                         </div>
 
-                        {/* Travel specific extra step if applicable */}
-                        {(deal.store === 'Booking.com' || deal.store === 'Agoda') && (
-                            <div class="relative pl-8 pb-6 timeline-item">
-                                <div class="timeline-line"></div>
-                                <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-white text-xs z-10">
-                                    {isRejected ? '✓' : '⏱'}
-                                </div>
-                                <h3 class="font-bold text-finder-gray">Trip completed 🏝️</h3>
-                                <p class="text-sm text-finder-gray mt-1">Waiting for the merchant to confirm your trip was completed without cancellations.</p>
-                            </div>
-                        )}
-
-                        {/* Step 3: Resolution (Confirmed/Rejected/Pending) */}
+                        {/* Step 3: Resolution */}
                         <div class="relative pl-8 pb-6 timeline-item">
                             {isConfirmed && (
                                 <>
                                     <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-finder-green flex items-center justify-center text-white text-xs z-10 shadow-sm">✓</div>
-                                    <h3 class="font-bold text-finder-dark">Cashback confirmed</h3>
-                                    <p class="text-sm text-finder-dark mt-1">You can use it to offset your next purchase or withdraw it as cash.</p>
+                                    <h3 class="font-bold text-finder-dark">Reward confirmed</h3>
+                                    <p class="text-sm text-finder-dark mt-1">Your reward is ready to be claimed or has been paid out.</p>
                                 </>
                             )}
                             {isRejected && (
                                 <>
                                     <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-finder-red flex items-center justify-center text-white text-xs z-10 shadow-sm">✕</div>
-                                    <h3 class="font-bold text-finder-dark">Cashback rejected</h3>
-                                    <p class="text-sm text-finder-dark mt-1">We couldn't confirm your Cashback for one of these reasons:</p>
+                                    <h3 class="font-bold text-finder-dark">Reward not eligible</h3>
+                                    <p class="text-sm text-finder-dark mt-1">We couldn't confirm your Reward for one of these reasons:</p>
                                     <ol class="text-sm text-finder-dark mt-2 list-decimal pl-4 space-y-1">
-                                        <li>The order was cancelled or returned.</li>
-                                        <li>The purchase did not meet the terms.</li>
-                                        <li>Payment was not completed.</li>
+                                        <li>The application or action was cancelled.</li>
+                                        <li>You did not meet the eligibility criteria.</li>
+                                        <li>The provider rejected the attribution.</li>
                                     </ol>
                                 </>
                             )}
                             {isTracked && (
                                 <>
                                     <div class="absolute left-0 top-1 w-6 h-6 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-400 text-xs z-10"></div>
-                                    <h3 class="font-bold text-finder-gray">Cashback confirmation</h3>
-                                    <p class="text-sm text-finder-gray mt-1">Expected {deal.date}</p>
+                                    <h3 class="font-bold text-gray-400">Reward confirmation</h3>
+                                    <p class="text-sm text-gray-400 mt-1">Expected {deal.date}</p>
                                 </>
                             )}
-                        </div>
-                    </div>
-
-                    <div class="p-4 border-t">
-                        <h3 class="font-bold text-base mb-3">Tracking info</h3>
-                        <div class="space-y-2 text-sm">
-                            <div class="flex justify-between"><span class="text-finder-gray">Eligible purchase amount</span><span class="font-medium">$49.99</span></div>
-                            <div class="flex justify-between"><span class="text-finder-gray">Cashback tier</span><span class="font-medium">Standard Cashback</span></div>
-                            <div class="flex justify-between"><span class="text-finder-gray">Cashback rate</span><span class="font-medium">7%</span></div>
-                            <div class="flex justify-between"><span class="text-finder-gray">Tracked Cashback</span><span class="font-medium">{deal.amount}</span></div>
                         </div>
                     </div>
                 </div>
@@ -250,11 +309,18 @@
             const [selectedDeal, setSelectedDeal] = useState(null);
             
             return (
-                <div class="min-h-screen bg-gray-100 py-8">
+                <div class="min-h-screen bg-white">
                     {!selectedDeal ? (
                         <ListView onSelectDeal={setSelectedDeal} />
                     ) : (
-                        <DetailView deal={selectedDeal} onBack={() => setSelectedDeal(null)} />
+                        <div>
+                            <div class="p-4 flex items-center justify-between border-b max-w-6xl mx-auto">
+                                <button class="text-finder-blue font-medium hover:underline flex items-center gap-1" onClick={() => setSelectedDeal(null)}>
+                                    &larr; Back to Active rewards
+                                </button>
+                            </div>
+                            <DetailView deal={selectedDeal} onBack={() => setSelectedDeal(null)} />
+                        </div>
                     )}
                 </div>
             );

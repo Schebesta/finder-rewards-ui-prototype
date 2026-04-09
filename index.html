@@ -103,13 +103,13 @@
         const ListView = ({ onSelectDeal }) => {
             const getStatusBadge = (status) => {
                 if (status === 'TRACKED VISIT') {
-                    return <span class="px-3 py-1 rounded-full border border-finder-blueborder bg-finder-lightblue text-xs font-bold text-gray-900 tracking-wide">{status}</span>;
+                    return <span class="px-3 py-1 rounded-full border border-finder-blueborder bg-finder-lightblue text-xs font-bold text-gray-900 tracking-wide whitespace-nowrap inline-block">{status}</span>;
                 } else if (status === 'CLAIMED') {
-                    return <span class="px-3 py-1 rounded-full border border-green-200 bg-green-50 text-xs font-bold text-green-800 tracking-wide">{status}</span>;
+                    return <span class="px-3 py-1 rounded-full border border-green-200 bg-green-50 text-xs font-bold text-green-800 tracking-wide whitespace-nowrap inline-block">{status}</span>;
                 } else if (status === 'NOT ELIGIBLE') {
-                    return <span class="px-3 py-1 rounded-full border border-red-200 bg-red-50 text-xs font-bold text-red-800 tracking-wide">{status}</span>;
+                    return <span class="px-3 py-1 rounded-full border border-red-200 bg-red-50 text-xs font-bold text-red-800 tracking-wide whitespace-nowrap inline-block">{status}</span>;
                 }
-                return <span class="px-3 py-1 rounded-full border border-gray-200 bg-gray-50 text-xs font-bold text-gray-700">{status}</span>;
+                return <span class="px-3 py-1 rounded-full border border-gray-200 bg-gray-50 text-xs font-bold text-gray-700 whitespace-nowrap inline-block">{status}</span>;
             };
 
             return (

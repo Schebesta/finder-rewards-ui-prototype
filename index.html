@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finder Rewards Status Prototype</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        finder: {
+                            blue: '#0052FF',
+                            lightblue: '#E5EDFF',
+                            dark: '#1A202C',
+                            gray: '#718096',
+                            lightgray: '#F7FAFC',
+                            green: '#00B268',
+                            lightgreen: '#E6F7F0',
+                            red: '#E53E3E',
+                            lightred: '#FED7D7',
+                            orange: '#F6AD55'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .timeline-line {
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            bottom: -8px;
+            width: 2px;
+            background-color: #E2E8F0;
+            z-index: 0;
+        }
+        .timeline-item:last-child .timeline-line {
+            display: none;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState } = React;
+
+        const dealsData = [
+            { id: 1, store: 'Agoda', amount: '$27.82', status: 'Tracked', date: '90 days after trip', icon: '🏨', purchaseDate: '10 Jan 2026 2:15pm' },
+            { id: 2, store: 'Booking.com', amount: '$42.63', status: 'Tracked', date: '70 days after trip', icon: '🏨', purchaseDate: '15 Jan 2026 9:30am' },
+            { id: 3, store: 'Booking.com', amount: '$3.08', status: 'Tracked', date: '22 Jan 2026', icon: '🏨', purchaseDate: '20 Nov 2025 4:45pm' },
+            { id: 4, store: 'Booking.com', amount: '$5.95', status: 'Rejected', date: '26 Dec 2025', icon: '🏨', purchaseDate: '26 Nov 2025 8:19pm' },
+            { id: 5, store: 'Strand', amount: '$3.50', status: 'Confirmed', date: '12 Mar 2025', icon: '👜', tag: 'Confirmed 12 days early ⚡', purchaseDate: '12 Feb 2025 11:11pm' },
+            { id: 6, store: 'Yasaka Ramen', amount: '$4.45', status: 'Rejected', date: '30 Dec 2024', icon: '🍜', purchaseDate: '15 Dec 2024 1:20pm' },
+        ];
+
+        const ListView = ({ onSelectDeal }) => {
+            const getStatusColor = (status) => {
+                switch(status) {
+                    case 'Confirmed': return 'text-finder-green font-medium';
+                    case 'Rejected': return 'text-finder-red font-medium';
+                    default: return 'text-finder-blue font-medium';
+                }
+            };
+
+            return (
+                <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg">
+                    <div class="px-4 py-4 border-b flex items-center justify-between sticky top-0 bg-white z-10">
+                        <button class="text-xl">&lt;</button>
+                        <h1 class="text-lg font-bold">My Cashback</h1>
+                        <button class="text-xl">🎧</button>
+                    </div>
+                    
+                    <div class="flex border-b">
+                        <button class="flex-1 py-3 border-b-2 border-finder-blue font-semibold text-finder-blue">Cashback in</button>
+                        <button class="flex-1 py-3 text-finder-gray">Cashback out</button>
+                    </div>
+
+                    <div class="flex gap-2 px-4 py-3 overflow-x-auto text-sm border-b no-scrollbar">
+                        <button class="px-3 py-1 rounded-full border bg-gray-50 flex items-center gap-1 whitespace-nowrap">Store <span>v</span></button>
+                        <button class="px-3 py-1 rounded-full border bg-gray-50 flex items-center gap-1 whitespace-nowrap">Date <span>v</span></button>
+                        <button class="px-3 py-1 rounded-full border bg-gray-50 whitespace-nowrap">Confirmed</button>
+                        <button class="px-3 py-1 rounded-full border bg-gray-50 whitespace-nowrap">Tracked</button>
+                    </div>
+
+                    <div class="divide-y pb-20">
+                        {dealsData.map((deal, idx) => (
+                            <div key={deal.id} class="p-4 cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => onSelectDeal(deal)}>
+                                {idx === 2 && <div class="text-sm font-medium text-finder-gray mb-2">22 Jan 2026</div>}
+                                {idx === 3 && <div class="text-sm font-medium text-finder-gray mb-2">26 Dec 2025</div>}
+                                {idx === 4 && <div class="text-sm font-medium text-finder-gray mb-2">12 Mar 2025</div>}
+                                {idx === 5 && <div class="text-sm font-medium text-finder-gray mb-2">30 Dec 2024</div>}
+                                
+                                <div class="flex justify-between items-start">
+                                    <div class="flex gap-3 items-start">
+                                        <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl">
+                                            {deal.icon}
+                                        </div>
+                                        <div>
+                                            <div class="font-bold text-base">{deal.store}</div>
+                                            <div class="text-sm text-finder-gray mt-1">
+                                                {deal.status === 'Tracked' ? `Store should confirm ${deal.date}` : (deal.tag ? <span class="text-finder-green">{deal.tag}</span> : deal.date)}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-base">{deal.amount}</div>
+                                        <div class={`text-sm mt-1 ${getStatusColor(deal.status)}`}>{deal.status}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        const DetailView = ({ deal, onBack }) => {
+            const isConfirmed = deal.status === 'Confirmed';
+            const isRejected = deal.status === 'Rejected';
+            const isTracked = deal.status === 'Tracked';
+
+            return (
+                <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-10">
+                    <div class="px-4 py-4 flex items-center sticky top-0 bg-white z-10 border-b">
+                        <button class="text-xl w-8 hover:bg-gray-100 rounded-full h-8 flex items-center justify-center" onClick={onBack}>&lt;</button>
+                        <h1 class="flex-1 text-center text-lg font-bold mr-8">Activity details</h1>
+                    </div>
+
+                    <div class="py-6 flex flex-col items-center border-b">
+                        {isConfirmed && (
+                            <div class="w-16 h-16 bg-finder-lightgreen rounded-2xl flex items-center justify-center mb-3 relative">
+                                <span class="text-3xl">💰</span>
+                                <div class="absolute -top-1 -right-1 bg-finder-green text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold border-2 border-white">✓</div>
+                            </div>
+                        )}
+                        {!isConfirmed && (
+                            <div class="text-4xl mb-3">{deal.icon}</div>
+                        )}
+                        
+                        <h2 class="text-lg font-bold text-finder-dark">{deal.store}</h2>
+                        <div class="text-3xl font-bold mt-1">{deal.amount}</div>
+                        
+                        {isConfirmed && <div class="text-finder-green font-medium text-sm mt-2">Confirmed</div>}
+                        {isRejected && <div class="text-finder-red font-medium text-sm mt-2 bg-finder-lightred px-2 py-1 rounded">Rejected</div>}
+                        {isTracked && <div class="text-finder-blue font-medium text-sm mt-2 bg-finder-lightblue px-2 py-1 rounded">Tracked</div>}
+                        
+                        <div class="text-finder-gray text-sm mt-2">{deal.purchaseDate}</div>
+                    </div>
+
+                    {deal.tag && (
+                        <div class="p-4 bg-orange-50 border-b flex gap-3 items-start">
+                            <span class="text-orange-500 mt-1">⚡</span>
+                            <p class="text-sm text-finder-dark">Your Cashback arrived earlier than expected. Talk about lightning-fast!</p>
+                        </div>
+                    )}
+
+                    <div class="p-4">
+                        {/* Step 1: Purchase Completed */}
+                        <div class="relative pl-8 pb-6 timeline-item">
+                            <div class="timeline-line"></div>
+                            <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-white text-xs z-10">✓</div>
+                            <h3 class="font-bold text-finder-gray">Purchase completed</h3>
+                            <p class="text-sm text-finder-gray mt-1">You've made a successful purchase with {deal.store}.</p>
+                        </div>
+
+                        {/* Step 2: Cashback Tracked */}
+                        <div class="relative pl-8 pb-6 timeline-item">
+                            <div class="timeline-line"></div>
+                            <div class={`absolute left-0 top-1 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs z-10 shadow-sm ${isTracked ? 'bg-finder-blue' : 'bg-gray-200'}`}>
+                                {isTracked ? '⏱' : '✓'}
+                            </div>
+                            <h3 class={`font-bold ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>Cashback tracked</h3>
+                            <p class={`text-sm mt-1 ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>
+                                Your order is currently under review by the store. We'll confirm your Cashback once the order is validated.
+                            </p>
+                        </div>
+
+                        {/* Travel specific extra step if applicable */}
+                        {(deal.store === 'Booking.com' || deal.store === 'Agoda') && (
+                            <div class="relative pl-8 pb-6 timeline-item">
+                                <div class="timeline-line"></div>
+                                <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-white text-xs z-10">
+                                    {isRejected ? '✓' : '⏱'}
+                                </div>
+                                <h3 class="font-bold text-finder-gray">Trip completed 🏝️</h3>
+                                <p class="text-sm text-finder-gray mt-1">Waiting for the merchant to confirm your trip was completed without cancellations.</p>
+                            </div>
+                        )}
+
+                        {/* Step 3: Resolution (Confirmed/Rejected/Pending) */}
+                        <div class="relative pl-8 pb-6 timeline-item">
+                            {isConfirmed && (
+                                <>
+                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-finder-green flex items-center justify-center text-white text-xs z-10 shadow-sm">✓</div>
+                                    <h3 class="font-bold text-finder-dark">Cashback confirmed</h3>
+                                    <p class="text-sm text-finder-dark mt-1">You can use it to offset your next purchase or withdraw it as cash.</p>
+                                </>
+                            )}
+                            {isRejected && (
+                                <>
+                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-finder-red flex items-center justify-center text-white text-xs z-10 shadow-sm">✕</div>
+                                    <h3 class="font-bold text-finder-dark">Cashback rejected</h3>
+                                    <p class="text-sm text-finder-dark mt-1">We couldn't confirm your Cashback for one of these reasons:</p>
+                                    <ol class="text-sm text-finder-dark mt-2 list-decimal pl-4 space-y-1">
+                                        <li>The order was cancelled or returned.</li>
+                                        <li>The purchase did not meet the terms.</li>
+                                        <li>Payment was not completed.</li>
+                                    </ol>
+                                </>
+                            )}
+                            {isTracked && (
+                                <>
+                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-400 text-xs z-10"></div>
+                                    <h3 class="font-bold text-finder-gray">Cashback confirmation</h3>
+                                    <p class="text-sm text-finder-gray mt-1">Expected {deal.date}</p>
+                                </>
+                            )}
+                        </div>
+                    </div>
+
+                    <div class="p-4 border-t">
+                        <h3 class="font-bold text-base mb-3">Tracking info</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between"><span class="text-finder-gray">Eligible purchase amount</span><span class="font-medium">$49.99</span></div>
+                            <div class="flex justify-between"><span class="text-finder-gray">Cashback tier</span><span class="font-medium">Standard Cashback</span></div>
+                            <div class="flex justify-between"><span class="text-finder-gray">Cashback rate</span><span class="font-medium">7%</span></div>
+                            <div class="flex justify-between"><span class="text-finder-gray">Tracked Cashback</span><span class="font-medium">{deal.amount}</span></div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [selectedDeal, setSelectedDeal] = useState(null);
+            
+            return (
+                <div class="min-h-screen bg-gray-100 py-8">
+                    {!selectedDeal ? (
+                        <ListView onSelectDeal={setSelectedDeal} />
+                    ) : (
+                        <DetailView deal={selectedDeal} onBack={() => setSelectedDeal(null)} />
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

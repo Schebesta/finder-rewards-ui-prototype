@@ -54,7 +54,7 @@
         }
     </style>
 </head>
-<body class="text-gray-900">
+<body class="text-gray-900 bg-gray-50 md:bg-white">
     <div id="root"></div>
 
     <script type="text/babel">
@@ -103,30 +103,31 @@
         const ListView = ({ onSelectDeal }) => {
             const getStatusBadge = (status) => {
                 if (status === 'TRACKED VISIT') {
-                    return <span class="px-3 py-1 rounded-full border border-finder-blueborder bg-finder-lightblue text-xs font-bold text-gray-900 tracking-wide whitespace-nowrap inline-block">{status}</span>;
+                    return <span class="px-3 py-1 rounded-full border border-finder-blueborder bg-finder-lightblue text-[10px] md:text-xs font-bold text-gray-900 tracking-wide whitespace-nowrap inline-block">{status}</span>;
                 } else if (status === 'CLAIMED') {
-                    return <span class="px-3 py-1 rounded-full border border-green-200 bg-green-50 text-xs font-bold text-green-800 tracking-wide whitespace-nowrap inline-block">{status}</span>;
+                    return <span class="px-3 py-1 rounded-full border border-green-200 bg-green-50 text-[10px] md:text-xs font-bold text-green-800 tracking-wide whitespace-nowrap inline-block">{status}</span>;
                 } else if (status === 'NOT ELIGIBLE') {
-                    return <span class="px-3 py-1 rounded-full border border-red-200 bg-red-50 text-xs font-bold text-red-800 tracking-wide whitespace-nowrap inline-block">{status}</span>;
+                    return <span class="px-3 py-1 rounded-full border border-red-200 bg-red-50 text-[10px] md:text-xs font-bold text-red-800 tracking-wide whitespace-nowrap inline-block">{status}</span>;
                 }
-                return <span class="px-3 py-1 rounded-full border border-gray-200 bg-gray-50 text-xs font-bold text-gray-700 whitespace-nowrap inline-block">{status}</span>;
+                return <span class="px-3 py-1 rounded-full border border-gray-200 bg-gray-50 text-[10px] md:text-xs font-bold text-gray-700 whitespace-nowrap inline-block">{status}</span>;
             };
 
             return (
-                <div class="max-w-6xl mx-auto p-8">
-                    <h1 class="text-2xl font-bold text-gray-900 mb-6">Active rewards</h1>
+                <div class="max-w-6xl mx-auto p-4 md:p-8">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-4 md:mb-6">Active rewards</h1>
                     
-                    <div class="flex gap-3 mb-8 overflow-x-auto pb-2 no-scrollbar">
-                        <button class="px-5 py-2 bg-gray-900 text-white rounded-full text-sm font-medium whitespace-nowrap">Show all (3)</button>
-                        <button class="px-5 py-2 border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 rounded-full text-sm whitespace-nowrap transition-colors">Tracked visit</button>
-                        <button class="px-5 py-2 border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 rounded-full text-sm whitespace-nowrap transition-colors">Processing</button>
-                        <button class="px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-sm whitespace-nowrap cursor-not-allowed">Ready to claim</button>
-                        <button class="px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-sm whitespace-nowrap cursor-not-allowed">Claimed</button>
-                        <button class="px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-sm whitespace-nowrap cursor-not-allowed">Not eligible</button>
+                    {/* Filter Buttons */}
+                    <div class="flex gap-2 md:gap-3 mb-6 md:mb-8 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 md:mx-0 md:px-0">
+                        <button class="px-4 md:px-5 py-2 bg-gray-900 text-white rounded-full text-xs md:text-sm font-medium whitespace-nowrap">Show all (3)</button>
+                        <button class="px-4 md:px-5 py-2 border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 rounded-full text-xs md:text-sm whitespace-nowrap transition-colors">Tracked visit</button>
+                        <button class="px-4 md:px-5 py-2 border border-gray-300 bg-white text-gray-800 hover:bg-gray-50 rounded-full text-xs md:text-sm whitespace-nowrap transition-colors">Processing</button>
+                        <button class="px-4 md:px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-xs md:text-sm whitespace-nowrap cursor-not-allowed hidden md:block">Ready to claim</button>
+                        <button class="px-4 md:px-5 py-2 border border-gray-200 bg-white text-gray-300 rounded-full text-xs md:text-sm whitespace-nowrap cursor-not-allowed hidden md:block">Claimed</button>
                     </div>
 
-                    <div class="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
-                        <table class="w-full text-left border-collapse">
+                    <div class="border-y md:border border-gray-200 md:rounded-xl overflow-hidden bg-white shadow-sm -mx-4 md:mx-0">
+                        {/* Desktop Table */}
+                        <table class="hidden md:table w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-finder-lightgray border-b border-gray-200">
                                     <th class="py-4 px-6 font-medium text-gray-600 w-1/3">Reward product</th>
@@ -146,7 +147,7 @@
                                     >
                                         <td class="py-6 px-6">
                                             <div class="flex items-center gap-6">
-                                                <div class="w-24 flex justify-center items-center">
+                                                <div class="w-24 flex justify-center items-center scale-90">
                                                     {deal.logo}
                                                 </div>
                                                 <div>
@@ -180,6 +181,38 @@
                                 ))}
                             </tbody>
                         </table>
+
+                        {/* Mobile List */}
+                        <div class="md:hidden divide-y divide-gray-100">
+                            {dealsData.map((deal) => (
+                                <div 
+                                    key={deal.id} 
+                                    class="p-4 hover:bg-gray-50 cursor-pointer active:bg-gray-100 transition-colors"
+                                    onClick={() => onSelectDeal(deal)}
+                                >
+                                    <div class="flex justify-between items-start mb-3">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-14 flex justify-center items-center scale-50 origin-left opacity-90">
+                                                {deal.logo}
+                                            </div>
+                                            <div>
+                                                {deal.preTitle && <div class="text-[10px] text-gray-500 font-bold tracking-wider uppercase mb-0.5">{deal.preTitle}</div>}
+                                                <div class="text-sm font-bold text-gray-900 leading-tight">{deal.rewardName}</div>
+                                                <div class="text-xs text-gray-500 mt-1">Payment: {deal.date}</div>
+                                            </div>
+                                        </div>
+                                        <div class="text-right flex flex-col items-end gap-2 shrink-0 ml-2">
+                                            <div class="text-lg font-bold text-gray-900 leading-none">{deal.amount}</div>
+                                            {getStatusBadge(deal.status)}
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 text-xs text-gray-600 bg-gray-50 rounded-lg p-2.5 border border-gray-100 flex items-start gap-2">
+                                        <span class="text-finder-blue text-sm leading-none pt-0.5">ℹ</span> 
+                                        <span>{deal.update}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             );
@@ -191,13 +224,14 @@
             const isTracked = deal.internalStatus === 'Tracked';
 
             return (
-                <div class="max-w-md mx-auto bg-white min-h-screen shadow-lg pb-10 mt-8 border rounded-xl overflow-hidden">
-                    <div class="px-4 py-4 flex items-center sticky top-0 bg-white z-10 border-b">
-                        <button class="text-xl w-8 hover:bg-gray-100 rounded-full h-8 flex items-center justify-center" onClick={onBack}>&lt;</button>
-                        <h1 class="flex-1 text-center text-lg font-bold mr-8">Activity details</h1>
+                <div class="max-w-md mx-auto bg-white min-h-screen md:min-h-0 md:mt-8 md:border md:rounded-xl md:shadow-lg pb-10 overflow-hidden">
+                    {/* Mobile Header */}
+                    <div class="px-4 py-4 flex items-center sticky top-0 bg-white z-10 border-b md:hidden shadow-sm">
+                        <button class="text-xl w-8 hover:bg-gray-100 rounded-full h-8 flex items-center justify-center -ml-2" onClick={onBack}>&lt;</button>
+                        <h1 class="flex-1 text-center text-lg font-bold mr-6">Activity details</h1>
                     </div>
 
-                    <div class="py-6 flex flex-col items-center border-b">
+                    <div class="py-8 md:py-6 flex flex-col items-center border-b px-4">
                         {isConfirmed && (
                             <div class="w-16 h-16 bg-finder-lightgreen rounded-2xl flex items-center justify-center mb-3 relative">
                                 <span class="text-3xl">💰</span>
@@ -205,42 +239,42 @@
                             </div>
                         )}
                         {!isConfirmed && (
-                            <div class="mb-4 h-12 flex items-center justify-center scale-150">{deal.logo}</div>
+                            <div class="mb-4 h-12 flex items-center justify-center scale-125">{deal.logo}</div>
                         )}
                         
-                        <h2 class="text-lg font-bold text-finder-dark">{deal.store}</h2>
-                        <div class="text-3xl font-bold mt-1">{deal.amount}</div>
+                        <h2 class="text-xl md:text-lg font-bold text-finder-dark text-center">{deal.store}</h2>
+                        <div class="text-4xl md:text-3xl font-bold mt-2">{deal.amount}</div>
                         
-                        {isConfirmed && <div class="text-finder-green font-medium text-sm mt-2">Confirmed</div>}
-                        {isRejected && <div class="text-finder-red font-medium text-sm mt-2 bg-finder-lightred px-2 py-1 rounded">Rejected</div>}
-                        {isTracked && <div class="text-finder-blue font-medium text-sm mt-2 bg-finder-lightblue px-2 py-1 rounded border border-finder-blueborder">Tracked</div>}
+                        {isConfirmed && <div class="text-finder-green font-medium text-sm mt-3 md:mt-2">Confirmed</div>}
+                        {isRejected && <div class="text-finder-red font-medium text-sm mt-3 md:mt-2 bg-finder-lightred px-3 py-1 rounded-full">Rejected</div>}
+                        {isTracked && <div class="text-finder-blue font-medium text-sm mt-3 md:mt-2 bg-finder-lightblue px-3 py-1 rounded-full border border-finder-blueborder">Tracked</div>}
                         
-                        <div class="text-finder-gray text-sm mt-2">{deal.purchaseDate}</div>
+                        <div class="text-finder-gray text-sm mt-3">{deal.purchaseDate}</div>
                     </div>
 
                     {deal.tag && (
                         <div class="p-4 bg-orange-50 border-b flex gap-3 items-start">
-                            <span class="text-orange-500 mt-1">⚡</span>
-                            <p class="text-sm text-finder-dark">Your Reward arrived earlier than expected. Talk about lightning-fast!</p>
+                            <span class="text-orange-500 mt-1 text-lg">⚡</span>
+                            <p class="text-sm text-finder-dark font-medium">Your Reward arrived earlier than expected. Talk about lightning-fast!</p>
                         </div>
                     )}
 
-                    <div class="p-4">
+                    <div class="p-5 md:p-4">
                         {/* Step 1: Purchase Completed */}
-                        <div class="relative pl-8 pb-6 timeline-item">
+                        <div class="relative pl-8 pb-8 md:pb-6 timeline-item">
                             <div class="timeline-line"></div>
                             <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-white text-xs z-10">✓</div>
-                            <h3 class="font-bold text-finder-gray">Action completed</h3>
+                            <h3 class="font-bold text-finder-gray text-base md:text-sm">Action completed</h3>
                             <p class="text-sm text-finder-gray mt-1">You've successfully completed the required action with {deal.store}.</p>
                         </div>
 
                         {/* Step 2: Tracked */}
-                        <div class="relative pl-8 pb-6 timeline-item">
+                        <div class="relative pl-8 pb-8 md:pb-6 timeline-item">
                             <div class="timeline-line"></div>
                             <div class={`absolute left-0 top-1 w-6 h-6 rounded-full flex items-center justify-center text-white text-xs z-10 shadow-sm ${isTracked ? 'bg-finder-blue' : 'bg-gray-200'}`}>
                                 {isTracked ? '⏱' : '✓'}
                             </div>
-                            <h3 class={`font-bold ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>Reward tracked</h3>
+                            <h3 class={`font-bold text-base md:text-sm ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>Reward tracked</h3>
                             <p class={`text-sm mt-1 ${isTracked ? 'text-finder-dark' : 'text-finder-gray'}`}>
                                 {deal.update} We'll confirm your Reward once it is fully validated by the provider.
                             </p>
@@ -251,14 +285,14 @@
                             {isConfirmed && (
                                 <>
                                     <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-finder-green flex items-center justify-center text-white text-xs z-10 shadow-sm">✓</div>
-                                    <h3 class="font-bold text-finder-dark">Reward confirmed</h3>
+                                    <h3 class="font-bold text-finder-dark text-base md:text-sm">Reward confirmed</h3>
                                     <p class="text-sm text-finder-dark mt-1">Your reward is ready to be claimed or has been paid out.</p>
                                 </>
                             )}
                             {isRejected && (
                                 <>
                                     <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-finder-red flex items-center justify-center text-white text-xs z-10 shadow-sm">✕</div>
-                                    <h3 class="font-bold text-finder-dark">Reward not eligible</h3>
+                                    <h3 class="font-bold text-finder-dark text-base md:text-sm">Reward not eligible</h3>
                                     <p class="text-sm text-finder-dark mt-1">We couldn't confirm your Reward for one of these reasons:</p>
                                     <ol class="text-sm text-finder-dark mt-2 list-decimal pl-4 space-y-1">
                                         <li>The application or action was cancelled.</li>
@@ -270,7 +304,7 @@
                             {isTracked && (
                                 <>
                                     <div class="absolute left-0 top-1 w-6 h-6 rounded-full border-2 border-gray-200 bg-white flex items-center justify-center text-gray-400 text-xs z-10"></div>
-                                    <h3 class="font-bold text-gray-400">Reward confirmation</h3>
+                                    <h3 class="font-bold text-gray-400 text-base md:text-sm">Reward confirmation</h3>
                                     <p class="text-sm text-gray-400 mt-1">Expected {deal.date}</p>
                                 </>
                             )}
@@ -288,8 +322,9 @@
                     {!selectedDeal ? (
                         <ListView onSelectDeal={setSelectedDeal} />
                     ) : (
-                        <div>
-                            <div class="p-4 flex items-center justify-between border-b max-w-6xl mx-auto">
+                        <div class="bg-gray-50 md:bg-white min-h-screen">
+                            {/* Desktop Header */}
+                            <div class="hidden md:flex p-4 items-center justify-between border-b max-w-6xl mx-auto">
                                 <button class="text-finder-blue font-medium hover:underline flex items-center gap-1" onClick={() => setSelectedDeal(null)}>
                                     &larr; Back to Active rewards
                                 </button>
